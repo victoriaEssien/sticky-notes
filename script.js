@@ -1,9 +1,12 @@
 const noteField = document.getElementById('noteInput');
+const errorMessage = document.getElementById('error-msg');
 const noteBoxContainer = document.getElementById('container');
 const addNoteBtn = document.getElementById('addNoteBtn');
 
+errorMessage.hidden = true;
 
 let notesArray = [];
+
 
 function displayNotes() {
 
@@ -58,16 +61,22 @@ function fetchNotes() {
 function storeNotes() {
 
     const noteInput = noteField.value
-    
-    const note = {
-        message: noteInput
-    };
 
-    notesArray.push(note);
-    localStorage.setItem('notes', JSON.stringify(notesArray));
-    fetchNotes();
+    if (noteInput === '') {
+        errorMessage.hidden = false;
+        setTimeout(() => errorMessage.remove(), 3000);
+    } else {
+        
+        const note = {
+            message: noteInput
+        };
 
-    noteField.value = '';
+        notesArray.push(note);
+        localStorage.setItem('notes', JSON.stringify(notesArray));
+        fetchNotes();
+
+        noteField.value = '';
+    }
 }
 
 addNoteBtn.addEventListener('click', storeNotes);
